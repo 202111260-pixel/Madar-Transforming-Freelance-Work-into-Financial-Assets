@@ -11,26 +11,25 @@
 3. [AI Agent Pipeline](#ai-agent-pipeline)
 4. [Credit Score Engine](#credit-score-engine)
 5. [Backend API](#backend-api)
-6. [Database Schema](#database-schema)
-7. [PDF Generation & Integrity](#pdf-generation--integrity)
-8. [Email & Notifications](#email--notifications)
-9. [Pages Reference](#pages-reference)
-10. [Component Reference](#component-reference)
-11. [Environment Variables](#environment-variables)
+6. [PDF Generation & Integrity](#pdf-generation--integrity)
+7. [Email & Notifications](#email--notifications)
+8. [Pages Reference](#pages-reference)
+9. [Component Reference](#component-reference)
+10. [Environment Variables](#environment-variables)
 
 ---
 
 ## System Overview
 
-Madar is a single-page React application with a lightweight Express API server. All AI inference is routed through ZenMux, a multi-provider LLM proxy. Persistent data lives in Supabase (PostgreSQL). The frontend communicates with Supabase directly via the JS client, and with the Express server for email/WhatsApp notifications.
+Madar is a single-page React application with a lightweight Express API server. All AI inference is routed through ZenMux, a multi-provider LLM proxy. State is persisted locally in `localStorage` and Zustand in-memory store. The frontend communicates with the Express server for email/WhatsApp notifications.
 
 ```
 Browser (React SPA)
-    ├── Supabase JS Client  →  Supabase (PostgreSQL)
-    ├── ZenMux fetch()      →  Claude / Gemini / DeepSeek
-    └── fetch('/api/*')     →  Express (port 3001)
-                                  ├── Resend  (email)
-                                  └── Twilio  (WhatsApp)
+    ├── localStorage / Zustand  →  Invoice data, scores, connections
+    ├── ZenMux fetch()          →  Claude / Gemini / DeepSeek
+    └── fetch('/api/*')         →  Express (port 3001)
+                                        ├── Resend  (email)
+                                        └── Twilio  (WhatsApp)
 ```
 
 ---
@@ -47,7 +46,6 @@ Browser (React SPA)
 | tailwindcss | 4.x | Utility CSS |
 | framer-motion | 12.x | Animations |
 | lenis | latest | Smooth scroll |
-| @supabase/supabase-js | 2.x | Database client |
 | jspdf | 3.x | PDF generation |
 | html2canvas | 1.x | PDF screenshots |
 | leaflet / react-leaflet | 4.x | Maps |
@@ -219,42 +217,6 @@ Response: { "status": "ok", "timestamp": "..." }
 
 ---
 
-## Database Schema
-
-**File:** `supabase/schema.sql`
-
-### Tables
-
-#### `synergy_invoices_v1`
-```sql
-id            uuid PRIMARY KEY DEFAULT gen_random_uuid()
-user_id       text NOT NULL
-client_name   text
-amount        numeric(12,2)
-currency      text DEFAULT 'OMR'
-due_date      date
-status        text DEFAULT 'pending'  -- pending | approved | rejected
-created_at    timestamptz DEFAULT now()
-```
-
-#### `synergy_connections_v4`
-```sql
-id            uuid PRIMARY KEY DEFAULT gen_random_uuid()
-user_id       text NOT NULL
-platform      text NOT NULL  -- upwork | fiverr | freelancer | ...
-connected_at  timestamptz DEFAULT now()
-```
-
-#### `synergy_latest_ai_score`
-```sql
-user_id       text PRIMARY KEY
-score         numeric(5,2)
-rationale     text
-updated_at    timestamptz DEFAULT now()
-```
-
----
-
 ## PDF Generation & Integrity
 
 **File:** `src/lib/generatePdfReport.ts`
@@ -399,8 +361,6 @@ Light/dark mode toggle. Uses `src/lib/theme.ts` for persistence in localStorage.
 
 | Variable | Required | Description |
 |---|---|---|
-| `VITE_SUPABASE_URL` | Yes | Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY` | Yes | Supabase anon/public key |
 | `ZENMUX_API_KEY` | Yes (backend) | ZenMux AI router API key |
 | `RESEND_API_KEY` | Yes (backend) | Resend email API key |
 | `TWILIO_ACCOUNT_SID` | Optional | Twilio account SID |

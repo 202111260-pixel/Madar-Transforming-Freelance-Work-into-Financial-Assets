@@ -50,11 +50,11 @@ We **purchase** your receivables at a flat **2.2% admin fee**. No riba. No debt.
 │              API Server (Express · port 3001)            │
 │   /contact · /send-invoice-email · /whatsapp-notify      │
 └──────┬─────────────┬──────────────┬──────────────────────┘
-       │             │              │
-  ┌────▼───┐   ┌─────▼────┐  ┌─────▼──────┐
-  │Supabase│   │  Resend  │  │   Twilio   │
-  │  (DB)  │   │ (Email)  │  │ (WhatsApp) │
-  └────────┘   └──────────┘  └────────────┘
+       │             │
+  ┌─────▼────┐  ┌─────▼──────┐
+  │  Resend  │  │   Twilio   │
+  │ (Email)  │  │ (WhatsApp) │
+  └──────────┘  └────────────┘
 
 ZenMux AI Router
   ├── Claude Opus 4.6   → Sentinel  (risk analysis)
@@ -70,7 +70,6 @@ ZenMux AI Router
 
 - Node.js 20+
 - npm 10+
-- Supabase project (free tier works)
 
 ### Installation
 
@@ -96,9 +95,6 @@ node scripts/api-server.cjs
 ### Environment Variables
 
 ```env
-VITE_SUPABASE_URL=https://xxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
-
 ZENMUX_API_KEY=your_zenmux_key
 RESEND_API_KEY=re_xxxx
 TWILIO_ACCOUNT_SID=ACxxxx
@@ -123,14 +119,13 @@ src/
 │   ├── agentPipeline.ts     # ZenMux sequential agent runner
 │   ├── scoreEngine.ts       # Unified credit score computation
 │   ├── synergyPipeline.ts   # Full AI analysis pipeline
-│   ├── supabaseClient.ts    # Supabase connection
+│   ├── storeBus.ts          # localStorage state persistence
 │   └── generatePdfReport.ts # Bank-ready PDF generation
 └── components/
     ├── MagicRings.tsx        # Animated agent status rings
     └── UnifiedScoreCard.tsx  # Credit score display
 scripts/
 ├── api-server.cjs           # Express backend (email, WhatsApp)
-└── seed_khalid_to_supabase.cjs  # Demo data seeder
 ```
 
 ---
@@ -191,7 +186,7 @@ Madar operates on a **receivables purchase** model:
 | Animation | Framer Motion |
 | Build | Vite 6 |
 | Backend | Express.js (Node) |
-| Database | Supabase (PostgreSQL) |
+| Database | localStorage + Zustand (in-memory) |
 | AI Router | ZenMux (Claude / Gemini / DeepSeek) |
 | Email | Resend |
 | Messaging | Twilio WhatsApp |
