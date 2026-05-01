@@ -1,0 +1,88 @@
+.generating-loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.72em;
+  font-weight: 700;
+  border-radius: 50%;
+  background-color: transparent;
+  user-select: none;
+}
+
+.generating-loader-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  z-index: 1;
+  max-width: 100px;
+  text-align: center;
+  line-height: 1.4;
+  animation: generating-loader-fade-in 0.35s ease-out;
+  letter-spacing: 0.4px;
+}
+
+@keyframes generating-loader-fade-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Orb base ── */
+.generating-loader-orb {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: transparent;
+  z-index: 0;
+  animation: generating-loader-rotate 2s linear infinite;
+}
+
+/* ── Blue (Sentinel) ── */
+.orb-blue .generating-loader-orb {
+  box-shadow:
+    0 0  40px 12px rgba(147,197,253,0.55) inset,
+    0 16px 36px 0   rgba(59,130,246,0.45) inset,
+    0 60px 70px 0   rgba(29,78,216,0.6)   inset;
+}
+
+/* ── Green (Negotiator) ── */
+.orb-green .generating-loader-orb {
+  box-shadow:
+    0 0  40px 12px rgba(110,231,183,0.55) inset,
+    0 16px 36px 0   rgba(16,185,129,0.45) inset,
+    0 60px 70px 0   rgba(4,120,87,0.6)    inset;
+}
+
+/* ── Amber (Treasurer) ── */
+.orb-amber .generating-loader-orb {
+  box-shadow:
+    0 0  40px 12px rgba(252,211,77,0.55)  inset,
+    0 16px 36px 0   rgba(245,158,11,0.45) inset,
+    0 60px 70px 0   rgba(180,83,9,0.6)    inset;
+}
+
+@keyframes generating-loader-rotate {
+  0%   { transform: rotate(90deg); }
+  50%  { transform: rotate(270deg); }
+  100% { transform: rotate(450deg); }
+}
+
+.generating-loader-letter {
+  display: inline-block;
+  opacity: 0.5;
+  animation: generating-loader-letter-anim 2s infinite;
+  z-index: 1;
+  letter-spacing: 0.3px;
+}
+
+@keyframes generating-loader-letter-anim {
+  0%, 100% { opacity: 0.5;  transform: translateY(0); }
+  20%       { opacity: 1;    transform: scale(1.12); }
+  40%       { opacity: 0.75; transform: translateY(0); }
+}

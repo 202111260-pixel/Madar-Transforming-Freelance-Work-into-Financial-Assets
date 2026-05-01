@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* ── Design tokens — light mode ── */
+:root {
+  --cream:  #faf8f5;
+  --card:   #fffdf9;
+  --border: #e8e4de;
+  --text:   #1a1a1a;
+  --text2:  #6b6560;
+  --text3:  #a8a29e;
+  --accent: #2563eb;
+}
+
+/* ── Dark mode overrides ── */
+html.dark {
+  --cream:  #0c0c0e;
+  --card:   #161618;
+  --border: #2c2c30;
+  --text:   #f2f0ec;
+  --text2:  #a8a29e;
+  --text3:  #57534e;
+  --accent: #3b82f6;
+  color-scheme: dark;
+}
+
+/* make sure tailwind dark-mode utility classes work */
+html.dark body { background: var(--cream); }
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; padding: 0; font-family: 'IBM Plex Sans Arabic', sans-serif; background: var(--cream); transition: background 0.2s; }
+#root { width: 100%; }
+
+/* â”€â”€ Animations for Operations Room â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(1.6); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-pin {
+  0%, 100% { box-shadow: 0 2px 16px rgba(239,68,68,0.6), 0 0 0 0 rgba(239,68,68,0.4); }
+  50%      { box-shadow: 0 2px 16px rgba(239,68,68,0.6), 0 0 0 8px rgba(239,68,68,0); }
+}
+
+.animate-pulse-dot   { animation: pulse-dot   1.4s ease-in-out infinite; }
+.animate-spin-slow   { animation: spin        3s   linear       infinite; }
+.animate-blink       { animation: blink-cursor 1s  step-end     infinite; }
+.animate-fade-in-up  { animation: fade-in-up  .5s  ease-out     both; }
